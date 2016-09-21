@@ -29,7 +29,7 @@ DEFINES += HAVE_CONFIG_H
 
 QMAKE_CFLAGS -= -fPIE -pie
 
-win32 {
+win32-msvc {
   DEFINES += WIN32 _WIN32
   INCLUDEPATH += ../$$BUILDDIR/win32
 
@@ -44,7 +44,7 @@ win32 {
   }
 }
 
-unix {
+unix|win32-g++ {
   CONFIG += staticlib
   CONFIG(sbcelt) {
     # Before Opus 1.1 we used to be able to build Opus
@@ -76,7 +76,7 @@ INCLUDEPATH *= \
 ../$$SOURCEDIR/silk/x86 \
 ../$$SOURCEDIR/silk/float
 
-win32 {
+win32-msvc {
   CONFIG *= opus-sse-sources
   CONFIG *= opus-sse2-sources
   CONFIG *= opus-sse41-sources

@@ -22,7 +22,7 @@ CONFIG(release, debug|release) {
 
 load(resources)
 
-win32 {
+win32:!win32-g++-cross {
 	WINPWD = $$shell_path($${PWD})
 	RCC_DEPENDS = $$escape_expand(\")$${WINPWD}\\scripts\\rcc-depends.py$$escape_expand(\")
 	rcc.depend_command = python $${RCC_DEPENDS} ${QMAKE_FILE_IN}

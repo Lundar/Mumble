@@ -23,7 +23,8 @@ QMAKE_RESOURCE_FLAGS += -compress 9
 # we define MUMBLE_ARCH to be used in its place.
 MUMBLE_ARCH = $$QMAKE_TARGET.arch
 
-win32 {
+
+win32-msvc {
 	# Define the CONFIG options 'force-x86-toolchain' and
 	# 'force-x86_64-toolchain'. These can be used to force
 	# the target of a .pro file to be built for a specific
@@ -179,7 +180,7 @@ win32 {
 	}
 }
 
-unix {
+unix|win32-g++ {
 	DEFINES *= RESTRICT=__restrict__
 	QMAKE_CFLAGS *= -fvisibility=hidden
 	QMAKE_CXXFLAGS *= -fvisibility=hidden
@@ -235,7 +236,16 @@ contains(UNAME, FreeBSD) {
 	QMAKE_LIBDIR *= /usr/local/lib
 }
 
-unix:!macx {
+win32-g++ {
+
+	#-fno-rtti causes error in protobuffers
+	QMAKE_CXXFLAGS *= -DGOOGLE_PROTOBUF_NO_RTTI
+	QMAKE_CFLAGS *= -DGOOGLE_PROTOBUF_NO_RTTI
+	#QMAKE_CFLAGS *= -lc
+
+}
+
+unix|win32-g++:!macx {
 	# If we're building in a Mumble build environment,
 	# add its include and lib dirs to the build configuration.
 	MUMBLE_PREFIX=$$(MUMBLE_PREFIX)
@@ -280,9 +290,10 @@ unix:!macx {
 		QMAKE_CFLAGS += -D_FORTIFY_SOURCE=2
 		QMAKE_CXXFLAGS += -D_FORTIFY_SOURCE=2
 	}
-
-	QMAKE_LFLAGS *= -Wl,-z,relro -Wl,-z,now
-
+	#mingw ld doesn't support -z options
+	!win32-g++{
+		QMAKE_LFLAGS *= -Wl,-z,relro -Wl,-z,now
+	}
 	CONFIG(symbols) {
 		QMAKE_CFLAGS *= -g
 		QMAKE_CXXFLAGS *= -g

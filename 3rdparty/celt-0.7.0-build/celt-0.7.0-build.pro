@@ -41,7 +41,7 @@ CONFIG(sbcelt) {
 
 QMAKE_CFLAGS -= -fPIE -pie
 
-win32 {
+win32-msvc {
   DEFINES += WIN32 _WIN32
   INCLUDEPATH += ../$$BUILDDIR/win32
 
@@ -53,7 +53,7 @@ win32 {
   }
 }
 
-unix {
+unix|win32-g++ {
 	contains(QMAKE_CFLAGS, -ffast-math) {
 		DEFINES += FLOAT_APPROX
 	}
