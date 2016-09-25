@@ -35,13 +35,16 @@ static HANDLE loadQoS() {
 
 	HRESULT hr = E_FAIL;
 
+	#ifdef _MSC_VER
 	__try {
 		hr = __HrLoadAllImportsForDll("qwave.dll");
 	}
-
 	__except(EXCEPTION_EXECUTE_HANDLER) {
 		hr = E_FAIL;
 	}
+	#else
+	hr = __HrLoadAllImportsForDll("qwave.dll");
+	#endif
 
 	if (! SUCCEEDED(hr)) {
 		qWarning("ServerHandler: Failed to load qWave.dll, no QoS available");

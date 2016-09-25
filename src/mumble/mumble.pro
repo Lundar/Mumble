@@ -369,6 +369,10 @@ win32 {
   LIBS		*= -ldelayimp -delayload:shell32.dll
 
   DEFINES	*= WIN32
+  
+  CONFIG(no-tts) {
+    DEFINES *= USE_NO_TTS
+  }
   !CONFIG(no-asio) {
     CONFIG	*= asio
   }

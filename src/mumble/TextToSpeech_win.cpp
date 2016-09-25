@@ -7,15 +7,19 @@
 
 #include "TextToSpeech.h"
 
-#include <servprov.h>
-#include <sapi.h>
+#ifndef USE_NO_TTS
+	#include <servprov.h>
+	#include <sapi.h>
+#endif
 
 #undef FAILED
 #define FAILED(Status) (static_cast<HRESULT>(Status)<0)
 
 class TextToSpeechPrivate {
 	public:
-		ISpVoice * pVoice;
+		#ifndef USE_NO_TTS
+			ISpVoice * pVoice;
+		#endif
 		TextToSpeechPrivate();
 		~TextToSpeechPrivate();
 		void say(const QString &text);
@@ -23,27 +27,35 @@ class TextToSpeechPrivate {
 };
 
 TextToSpeechPrivate::TextToSpeechPrivate() {
+	#ifndef USE_NO_TTS
 	pVoice = NULL;
 
 	HRESULT hr = CoCreateInstance(CLSID_SpVoice, NULL, CLSCTX_ALL, IID_ISpVoice, (void **)&pVoice);
 	if (FAILED(hr))
 		qWarning("TextToSpeechPrivate: Failed to allocate TTS Voice");
+	#endif
 }
 
 TextToSpeechPrivate::~TextToSpeechPrivate() {
+	#ifndef USE_NO_TTS
 	if (pVoice)
 		pVoice->Release();
+	#endif
 }
 
 void TextToSpeechPrivate::say(const QString &text) {
+	#ifndef USE_NO_TTS
 	if (pVoice) {
 		pVoice->Speak((const wchar_t *) text.utf16(), SPF_ASYNC, NULL);
 	}
+	#endif
 }
 
 void TextToSpeechPrivate::setVolume(int volume) {
+	#ifndef USE_NO_TTS
 	if (pVoice)
 		pVoice->SetVolume(volume);
+	#endif
 }
 
 TextToSpeech::TextToSpeech(QObject *p) : QObject(p) {
