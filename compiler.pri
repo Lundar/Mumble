@@ -238,17 +238,17 @@ contains(UNAME, FreeBSD) {
 
 win32-g++ {
 
-	#-fno-rtti causes error in protobuffers
-	#QMAKE_CXXFLAGS *= -DGOOGLE_PROTOBUF_NO_RTTI
 	
 	#fr some reason no-rtti is on by default, but rtti is used in the linux build?
 	CONFIG *= rtti
-	#for some reason the most common builds of mingw have bugs sapi, tts might work with the newest builds though.
+	#for some reason the most common builds of mingw have bugs in sapi, tts might work with the newest builds though.
 	CONFIG *= no-tts
 
-	#QMAKE_CFLAGS *= -DGOOGLE_PROTOBUF_NO_RTTI
-	QMAKE_CXXFLAGS *= -D_WIN32_WINNT=0x0600
-	QMAKE_CFLAGS *= -D_WIN32_WINNT=0x0600
+	#lets target win7 for now
+	QMAKE_CXXFLAGS *= -D_WIN32_WINNT=0x0601
+	QMAKE_CFLAGS *= -D_WIN32_WINNT=0x0601
+	QMAKE_CXXFLAGS *= -DNTDDI_VERSION=0x06010000
+	QMAKE_CFLAGS *= -DNTDDI_VERSION=0x06010000
 
 }
 

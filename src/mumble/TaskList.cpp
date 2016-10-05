@@ -71,9 +71,10 @@ void TaskList::addToRecentList(QString name, QString user, QString host, int por
 		qFatal("TaskList: Failed commit");
 		goto cleanup;
 	}
-
+	//function not defined in mingw if the target OS isn't win7 or  higher
+	#if NTDDI_VERSION >= 0x06010000
 	SHAddToRecentDocs(SHARD_LINK, link);
-
+	#endif
 cleanup:
 	if (ps)
 		ps->Release();

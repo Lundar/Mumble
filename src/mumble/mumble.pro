@@ -406,9 +406,11 @@ win32 {
   LIBS *= -lxinputcheck
 
   !CONFIG(mumble_dll) {
-    !CONFIG(no-elevation) {
-      CONFIG(release, debug|release) {
-        QMAKE_LFLAGS *= /MANIFESTUAC:\"level=\'asInvoker\' uiAccess=\'true\'\"
+    !win32-g++ {
+      !CONFIG(no-elevation) {
+        CONFIG(release, debug|release) {
+          QMAKE_LFLAGS *= /MANIFESTUAC:\"level=\'asInvoker\' uiAccess=\'true\'\"
+        }
       }
     }
     QMAKE_POST_LINK = $$QMAKE_POST_LINK$$escape_expand(\\n\\t)$$quote(mt.exe -nologo -updateresource:$(DESTDIR_TARGET);1 -manifest mumble.appcompat.manifest)
@@ -688,6 +690,14 @@ CONFIG(static_qt_plugins) {
   # Icon engines are special; they don't get their lib directory
   # included automatically by mkspecs/features/qt.prf
   LIBS *= -L$$[QT_INSTALL_PLUGINS]/iconengines
+}
+
+win32-g++-cross{
+
+  #LIBS -= -llibeay32 -lQwave -lAVRT
+
+
+
 }
 
 lrel.output = ${QMAKE_FILE_BASE}.qm

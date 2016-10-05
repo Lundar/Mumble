@@ -16,10 +16,10 @@
 #include <avrt.h>
 #include <audioclient.h>
 #include <ksmedia.h>
-#include <functiondiscoverykeys.h>
+#include <functiondiscoverykeys_devpkey.h>
 #include <propidl.h>
 #include <initguid.h>
-#include <Audiopolicy.h>
+#include <audiopolicy.h>
 
 #include "AudioInput.h"
 #include "AudioOutput.h"

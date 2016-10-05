@@ -836,6 +836,7 @@ void WASAPIOutput::run() {
 	bool lastspoke = false;
 	REFERENCE_TIME bufferDuration = (g.s.iOutputDelay > 1) ? (g.s.iOutputDelay + 1) * 100000 : 0;
 	bool exclusive = false;
+	bool mixed = false;
 
 	CoInitialize(NULL);
 
@@ -862,6 +863,7 @@ void WASAPIOutput::run() {
 
 	pAudioClient->GetDevicePeriod(&def, &min);
 	want = qMax<REFERENCE_TIME>(min, 100000);
+	
 	qWarning("WASAPIOutput: Latencies %lld %lld => %lld", def, min, want);
 
 	if (g.s.bExclusiveOutput) {
@@ -1002,7 +1004,6 @@ void WASAPIOutput::run() {
 	iChannels = pwfx->nChannels;
 	initializeMixer(chanmasks);
 
-	bool mixed = false;
 	numFramesAvailable = 0;
 
 	while (bRunning && ! FAILED(hr)) {

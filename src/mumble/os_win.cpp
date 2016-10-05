@@ -14,6 +14,9 @@
 #include <dbghelp.h>
 #include <emmintrin.h>
 #include <math.h>
+#include <float.h>
+#include <shobjidl.h>
+#include <share.h>
 
 #include "Global.h"
 #include "Version.h"
@@ -276,8 +279,11 @@ void os_init() {
 #endif
 
 	g.qdBasePath.mkpath(QLatin1String("Snapshots"));
-	if (bIsWin7)
+	//This is probably fixed in the mingw source, but not yet in the repos for main distros
+	#if NTDDI_VERSION >= 0x06010000
+	if (bIsWin7)//this if is now redundant
 		SetCurrentProcessExplicitAppUserModelID(L"net.sourceforge.mumble.Mumble");
+	#endif
 }
 
 DWORD WinVerifySslCert(const QByteArray& cert) {
