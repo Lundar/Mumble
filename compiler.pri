@@ -239,7 +239,7 @@ contains(UNAME, FreeBSD) {
 win32-g++ {
 
 	
-	#fr some reason no-rtti is on by default, but rtti is used in the linux build?
+	#for some reason no-rtti is on by default, but rtti is used in the linux build?
 	CONFIG *= rtti
 	#for some reason the most common builds of mingw have bugs in sapi, tts might work with the newest builds though.
 	CONFIG *= no-tts
@@ -271,6 +271,9 @@ unix|win32-g++:!macx {
 		QMAKE_CXXFLAGS *= -fstack-protector -fPIE
 		QMAKE_LFLAGS *= -pie
 		QMAKE_LFLAGS *= -Wl,--no-add-needed
+		win32-g++{
+			LIBS *= -lssp
+		}
 	}
 
 	# Ensure _FORTIFY_SOURCE is not used in debug builds.

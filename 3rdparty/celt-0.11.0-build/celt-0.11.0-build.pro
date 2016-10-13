@@ -36,8 +36,12 @@ QMAKE_CFLAGS -= -fPIE -pie
 
 win32 {
   DEFINES += WIN32 _WIN32
-  INCLUDEPATH += ../$$BUILDDIR/win32
-
+  win32-msvc {
+    INCLUDEPATH += ../$$BUILDDIR/win32
+  }
+  win32-g++ {
+    INCLUDEPATH += ../$$BUILDDIR
+  }
   CONFIG(sse2) {
     TARGET_VERSION_EXT = .$${VERSION}.sse2
   } else {

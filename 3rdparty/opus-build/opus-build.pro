@@ -29,9 +29,14 @@ DEFINES += HAVE_CONFIG_H
 
 QMAKE_CFLAGS -= -fPIE -pie
 
-win32-msvc {
+win32 {
   DEFINES += WIN32 _WIN32
-  INCLUDEPATH += ../$$BUILDDIR/win32
+  win32-msvc {
+    INCLUDEPATH += ../$$BUILDDIR/win32
+  }
+  win32-g++ {
+    INCLUDEPATH += ../$$BUILDDIR
+  }
 
   CONFIG -= static
   CONFIG += shared

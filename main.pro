@@ -50,7 +50,7 @@ SUBDIRS *= src/mumble_proto
     SUBDIRS *= plugins
   }
 
-  win32 {
+  win32-msvc {
     SUBDIRS *= overlay
     SUBDIRS *= overlay/overlay_exe
     SUBDIRS *= overlay_winx64
@@ -60,8 +60,10 @@ SUBDIRS *= src/mumble_proto
     }
   }
 
-  unix:!macx:!CONFIG(no-overlay) {
-    SUBDIRS *= overlay_gl
+  unix{
+    !macx:!CONFIG(no-overlay) {
+      SUBDIRS *= overlay_gl
+    }
   }
 
   macx {

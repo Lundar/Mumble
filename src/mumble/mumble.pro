@@ -412,9 +412,16 @@ win32 {
           QMAKE_LFLAGS *= /MANIFESTUAC:\"level=\'asInvoker\' uiAccess=\'true\'\"
         }
       }
+      QMAKE_POST_LINK = $$QMAKE_POST_LINK$$escape_expand(\\n\\t)$$quote(mt.exe -nologo -updateresource:$(DESTDIR_TARGET);1 -manifest mumble.appcompat.manifest)
     }
-    QMAKE_POST_LINK = $$QMAKE_POST_LINK$$escape_expand(\\n\\t)$$quote(mt.exe -nologo -updateresource:$(DESTDIR_TARGET);1 -manifest mumble.appcompat.manifest)
   }
+}
+
+#Add implicit libs
+win32-g++ {
+  #there are several msvcr* libraries, I don't know which should be used.
+  LIBS *= -luuid -lwinmm -lksuser -lmsvcr100
+
 }
 
 unix {
@@ -597,7 +604,7 @@ wasapi {
 	DEFINES *= USE_WASAPI
 	HEADERS	*= WASAPI.h WASAPINotificationClient.h
 	SOURCES	*= WASAPI.cpp WASAPINotificationClient.cpp
-	LIBS	*= -lAVRT -delayload:AVRT.DLL
+	LIBS	*= -lavrt -delayload:AVRT.DLL
 }
 
 g15 {
@@ -690,14 +697,6 @@ CONFIG(static_qt_plugins) {
   # Icon engines are special; they don't get their lib directory
   # included automatically by mkspecs/features/qt.prf
   LIBS *= -L$$[QT_INSTALL_PLUGINS]/iconengines
-}
-
-win32-g++-cross{
-
-  #LIBS -= -llibeay32 -lQwave -lAVRT
-
-
-
 }
 
 lrel.output = ${QMAKE_FILE_BASE}.qm
